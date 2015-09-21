@@ -31,6 +31,7 @@ gem 'less-rails' #Sprockets (what Rails 3.1 uses for its asset pipeline) support
 gem 'twitter-bootstrap-rails'
 
 gem 'devise' # Users authorization
+gem 'carrierwave' # Image uploads
 
 group :development, :test do
   # Access an IRB console on exception pages or by using <%= console %> in views

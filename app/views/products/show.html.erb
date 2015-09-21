@@ -8,6 +8,7 @@
   <dd><%= @product.name %></dd>
   <dt><strong><%= model_class.human_attribute_name(:description) %>:</strong></dt>
   <dd><%= @product.description %></dd>
+  <%= image_tag(@product.image_url) if @product.image? %>
 </dl>
 
 <%= link_to t('.back', :default => t("helpers.links.back")),
