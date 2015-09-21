@@ -17,8 +17,7 @@
         <li <%= current_page?(products_path) ? 'class=active' : '' %>><%= link_to 'Products', products_path %></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Log in</a></li>
-        <li><a href="#">Register</a></li>
+        <%= render 'layouts/user_links' %>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
