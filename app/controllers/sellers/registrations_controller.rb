@@ -1,11 +1,11 @@
-module Admins
+module Sellers
   class RegistrationsController < Devise::RegistrationsController
 
     private
 
     def sign_up_params
-      params.require(:admin).permit(
-        :first_name, :last_name,
+      params.require(:seller).permit(
+        :shop_name,
         user_attributes: [ :email, :password, :password_confirmation ]
       )
     end
