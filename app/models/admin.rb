@@ -12,6 +12,10 @@ class Admin < ActiveRecord::Base
     super
   end
 
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
   private
 
   def password_length

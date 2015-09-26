@@ -1,4 +1,5 @@
 <% if current_user %>
+  <li class="nav-bar-user"><%= "Welcome back, #{current_user.full_name} (Admin)" %></li>
   <li><%= link_to 'Log out', destroy_user_session_path, method: :delete %></li>
 <% else %>
   <li><%= link_to 'Log in', new_user_session_path %></li>
