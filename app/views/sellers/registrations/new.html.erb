@@ -10,6 +10,8 @@
     <% end %>
 
     <%= f.text_field :shop_name, autofocus: true, class: 'form-control', placeholder: 'Shop name' %>
+    <%= f.label :avatar_image, 'Avatar', class: 'control-label' %>
+    <%= f.file_field :avatar_image, class: 'form-control' %>
 
     <div class="actions">
       <%= f.submit 'Sign up', class: 'btn btn-lg btn-primary btn-block' %>

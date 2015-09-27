@@ -23,10 +23,12 @@
     </div>
     <%= error_span(@product[:name]) %>
   </div>
-  <div class="control-group text-left">
-    <%= f.check_box :pro %>
-    <%= f.label :pro %>
-  </div>
+  <% if can? :make_pro, Product %>
+    <div class="control-group text-left">
+      <%= f.check_box :pro %>
+      <%= f.label :pro %>
+    </div>
+  <% end %>
   <div class="control-group">
     <%= f.label :description, :class => 'control-label' %>
     <div class="controls">

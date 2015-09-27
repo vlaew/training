@@ -8,8 +8,13 @@
     <th><%= model_class.human_attribute_name(:id) %></th>
     <th><%= model_class.human_attribute_name(:name) %></th>
     <th><%= model_class.human_attribute_name(:description) %></th>
-    <% if can? :manage, Product %>
+    <% if can? :see_shop, Product %>
+      <th><%= model_class.human_attribute_name(:shop_name) %></th>
+    <% end %>
+    <% if can? :make_pro, Product %>
       <th><%= model_class.human_attribute_name(:pro) %></th>
+    <% end %>
+    <% if can? :update, Product %>
       <th><%= t '.actions', :default => t("helpers.actions") %></th>
     <% end %>
   </tr>
@@ -21,25 +26,32 @@
       <td><%= link_to product.name, product_path(product) %></td>
       <td><%= product.description %></td>
 
-      <% if can? :manage, Product %>
+      <% if can? :see_shop, Product %>
+        <td><%= product.shop_name %></td>
+      <% end %>
+      <% if can? :make_pro, Product %>
         <td><i class="<%= product.pro? ? 'fa fa-check-circle-o' : '' %>"></i></td>
-        <td>
+      <% end %>
+      <td>
+        <% if can? :update, product %>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_product_path(product), :class => 'btn btn-default btn-xs',
                       method:                            :get %>
+        <% end %>
+        <% if can? :destroy, product %>
           <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
                       product_path(product),
                       :method => :delete,
                       :data   => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                       :class  => 'btn btn-xs btn-danger' %>
-        </td>
-      <% end %>
+        <% end %>
+      </td>
     </tr>
   <% end %>
   </tbody>
 </table>
 
-<% if can? :manage, Product %>
+<% if can? :create, Product %>
   <%= button_to t('.new', :default => t("helpers.links.new")),
                 new_product_path,
                 :class  => 'btn btn-primary',

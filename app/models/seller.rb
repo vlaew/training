@@ -5,9 +5,12 @@ class Seller < ActiveRecord::Base
   accepts_nested_attributes_for :user
   delegate :email, :password, to: :user, allow_nil: true
 
+  has_many :products, dependent: :destroy
+
   devise :registerable#, :validatable, password_length: 10..128
 
   validate :password_length
+  validates :shop_name, :avatar_image, presence: true
 
   def method_missing(method, *args, &block)
     return self.user.send(method, *args) if self.user.respond_to?(method)

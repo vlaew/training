@@ -8,15 +8,21 @@
   <dd><%= @product.name %></dd>
   <dt><strong><%= model_class.human_attribute_name(:description) %>:</strong></dt>
   <dd><%= @product.description %></dd>
+  <% if can? :see_shop, @product %>
+    <dt><strong><%= model_class.human_attribute_name(:shop_name) %>:</strong></dt>
+    <dd><%= @product.shop_name %></dd>
+  <% end %>
   <%= image_tag(@product.image_url) if @product.image? %>
 </dl>
 
 <%= link_to t('.back', :default => t("helpers.links.back")),
             products_path, :class => 'btn btn-default' %>
 
-<% if can? :manage, Product %>
+<% if can? :update, @product %>
   <%= link_to t('.edit', :default => t("helpers.links.edit")),
               edit_product_path(@product), :class => 'btn btn-default' %>
+<% end %>
+<% if can? :destroy, @product %>
   <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
               product_path(@product),
               :method => 'delete',
