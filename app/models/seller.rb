@@ -1,4 +1,6 @@
 class Seller < ActiveRecord::Base
+  mount_uploader :avatar_image, SimpleImageUploader
+
   has_one :user, as: :roleable
   accepts_nested_attributes_for :user
   delegate :email, :password, to: :user, allow_nil: true

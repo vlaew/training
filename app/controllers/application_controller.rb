@@ -8,7 +8,15 @@ class ApplicationController < ActionController::Base
 
   # before_action :configure_permitted_parameters, if: :devise_controller?
 
-  protected
+  rescue_from CanCan::AccessDenied do |exception|
+    begin
+      redirect_to :back, alert: exception.message
+    rescue
+      redirect_to :root, alert: exception.message
+    end
+  end
+
+  # protected
   #
   # def current_user
   #   super.roleable

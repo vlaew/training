@@ -32,6 +32,7 @@ gem 'twitter-bootstrap-rails'
 
 gem 'devise' # Users authorization
 gem 'carrierwave' # Image uploads
+gem 'cancancan', '~> 1.10' # Authorization
 
 group :development, :test do
   # Access an IRB console on exception pages or by using <%= console %> in views

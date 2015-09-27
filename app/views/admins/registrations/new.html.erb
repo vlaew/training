@@ -11,6 +11,13 @@
 
     <%= f.text_field :first_name, autofocus: true, class: 'form-control', placeholder: 'First name' %>
     <%= f.text_field :last_name, autofocus: true, class: 'form-control', placeholder: 'Last name' %>
+    <%= f.label :avatar_image, 'Avatar', class: 'control-label' %>
+    <%= f.file_field :avatar_image, class: 'form-control' %>
+    <%= f.label :passport_image, 'Photo of passport', class: 'control-label' %>
+    <%= f.file_field :passport_image, class: 'form-control' %>
+    <%= f.label :birthdate, class: 'control-label' %>
+    <%= f.date_select :birthdate, start_year: Date.today.year - 150, end_year: Date.today.year, default: 10.years.ago,
+                                  class: 'form-control', label: 'birthdate' %>
 
     <div class="actions">
       <%= f.submit 'Sign up', class: 'btn btn-lg btn-primary btn-block' %>

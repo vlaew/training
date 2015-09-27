@@ -5,4 +5,16 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable, password_length: 6..128
 
   belongs_to :roleable, polymorphic: true
+
+  def admin?
+    roleable.is_a? Admin
+  end
+
+  def seller?
+    roleable.is_a? Seller
+  end
+
+  def guest?
+    roleable.is_a? Guest
+  end
 end

@@ -11,11 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150926090921) do
+ActiveRecord::Schema.define(version: 20150927192402) do
 
   create_table "admins", force: :cascade do |t|
-    t.string "first_name", null: false
-    t.string "last_name",  null: false
+    t.string "first_name",     null: false
+    t.string "last_name",      null: false
+    t.string "avatar_image"
+    t.string "passport_image"
+    t.date   "birthdate"
   end
 
   create_table "guests", force: :cascade do |t|
@@ -26,9 +29,10 @@ ActiveRecord::Schema.define(version: 20150926090921) do
   create_table "products", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.string   "image"
+    t.boolean  "pro",         default: false, null: false
   end
 
   create_table "sellers", force: :cascade do |t|
