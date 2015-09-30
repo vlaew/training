@@ -5,19 +5,16 @@ class Ability
     user ||= User.new
     case
     when user.admin?
-      can :read, Product
-      can :update, Product
-      can :destroy, Product
-      can :make_pro, Product
-      can :see_shop, Product
+      can [:read, :update, :destroy, :make_pro, :see_shop], Product
     when user.seller?
-      can :read, Product
-      can :create, Product
-      can :update, Product, seller_id: user.roleable_id
-      can :destroy, Product, seller_id: user.roleable_id
-      can :see_shop, Product
+      can [:create, :read, :see_shop], Product
+      can [:update, :destroy], Product, seller_id: user.roleable_id
     when user.guest?
       can :read, Product
+      can :buy, Product do |product|
+        !product.pro? &&
+          product.seller.present?
+      end
     else
       can :read, Product, pro: false
     end

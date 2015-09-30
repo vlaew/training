@@ -15,6 +15,11 @@
   <%= image_tag(@product.image_url) if @product.image? %>
 </dl>
 
+<% if can? :buy, @product %>
+  <%= link_to t('products.actions.buy'),
+              buy_product_path, :class => 'btn btn-default', method: :post %>
+<% end %>
+
 <%= link_to t('.back', :default => t("helpers.links.back")),
             products_path, :class => 'btn btn-default' %>
 
@@ -22,6 +27,7 @@
   <%= link_to t('.edit', :default => t("helpers.links.edit")),
               edit_product_path(@product), :class => 'btn btn-default' %>
 <% end %>
+
 <% if can? :destroy, @product %>
   <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
               product_path(@product),

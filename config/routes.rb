@@ -5,6 +5,8 @@ Rails.application.routes.draw do
 
   devise_for :users, path: '/', path_names: { sign_in: 'login', sign_out: 'logout' },
              only: [:sessions]
-  resources :products
+  resources :products do
+    post 'buy', on: :member
+  end
   root 'home#index'
 end

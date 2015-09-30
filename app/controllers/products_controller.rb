@@ -58,6 +58,15 @@ class ProductsController < ApplicationController
     end
   end
 
+  def buy
+    result = BuyingProcess::Manager.new.buy(user: current_user.roleable, product: @product)
+    if result.success?
+      redirect_to @product, notice: 'You successfully bought this product!'
+    else
+      redirect_to @product, flash: { alert: 'Failed to buy this product!', error: result.errors.join('; ') }
+    end
+  end
+
   private
 
     # Never trust parameters from the scary internet, only allow the white list through.
