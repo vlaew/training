@@ -10,8 +10,9 @@ class AdminPurchaseMailer < ActionMailer::Base
     )
   end
 
-  def operation_fail(admin, guest_email)
+  def operation_fail(admin, guest_email, errors = [])
     @guest_email = guest_email
+    @errors = errors
     mail(
       from:     'dima@belka-studio.ru',
       to:       mail_to(admin),

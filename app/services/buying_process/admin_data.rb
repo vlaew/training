@@ -11,17 +11,13 @@ module BuyingProcess
     private
 
     def get_todo_id
-      response = connection.post('/todos')
+      response = connection.post(path: '/todos', tries: 3, timeout: 10)
       response = JSON.parse response.body
       response.fetch('id')
     end
 
     def connection
-      @connection ||= Faraday.new(url: DATA_URL) do |faraday|
-        faraday.request :url_encoded
-        faraday.response :logger
-        faraday.adapter Faraday.default_adapter
-      end
+      @connection ||= Requester.new(DATA_URL)
     end
   end
 end

@@ -3,5 +3,15 @@
   <p>
     Operation failed for user with email: <%= @guest_email %>
   </p>
+  <p>
+    There were errors:
+  </p>
+  <ul>
+    <% @errors.each do |error| %>
+      <li>
+        <%= error %>
+      </li>
+    <% end %>
+  </ul>
 </body>
 </html>
