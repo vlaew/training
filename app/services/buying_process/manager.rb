@@ -1,77 +1,87 @@
 module BuyingProcess
-  class Manager
-    def buy(user:, product:)
-      errors = check_requirements(user, product)
-      return handle_fail(user, errors) if errors.any?
-      begin
+  module Manager
+    class << self
+      def buy(customer:, product:)
+        errors = check_requirements(customer, product)
+        return handle_fail(customer, errors) if errors.any?
+
         customer_data = retrieve_customer_data
-      rescue Exception
-        return handle_fail(user, ['Customer data API timed out'])
-      end
-      begin
+        return handle_fail(customer, customer_data.errors) if customer_data.errors.any?
+
+        errors = customer_data_errors(customer_data)
+        return handle_fail(customer, errors) if errors.any?
+
         admin_data = retrieve_admin_data
-      rescue Exception
-        return handle_fail(user, ['Admin data API timed out'])
+        return handle_fail(customer, customer_data.errors) if customer_data.errors.any?
+
+        handle_success(customer, customer_data, admin_data)
       end
 
-      errors = customer_data_errors(customer_data)
-      return handle_fail(user, errors) if errors.any?
+      private
 
-      GuestPurchaseMailer.purchase_email(user, customer_data).deliver
-      notify_admins_success(admin_data)
-      BuyingResult.new(success: true, errors: [])
-    end
-
-    private
-
-    def handle_fail(user, errors)
-      notify_admins_fail(user.email, errors)
-      BuyingResult.new(success: false, errors: errors)
-    end
-
-    def notify_admins_success(admin_data)
-      Admin.all.each do |admin|
-        AdminPurchaseMailer.operation_success(admin, admin_data).deliver
+      def handle_success(customer, customer_data, admin_data)
+        notify_customer_success(customer, customer_data)
+        notify_admins_success(admin_data)
+        BuyingProcess::BuyingResult.new(success: true, errors: [])
       end
-    end
 
-    def notify_admins_fail(user_email, errors)
-      Admin.all.each do |admin|
-        AdminPurchaseMailer.operation_fail(admin, user_email, errors).deliver
+      def handle_fail(customer, errors)
+        notify_admins_fail(customer.email, errors)
+        BuyingProcess::BuyingResult.new(success: false, errors: errors)
       end
-    end
 
-    def check_requirements(user, product)
-      errors = []
-      errors << 'Users with email in *.com domain can not purchase products' unless user_valid?(user)
-      errors
-    end
+      def notify_customer_success(customer, customer_data)
+        GuestPurchaseMailer.purchase_email(customer, customer_data).deliver_later
+      end
 
-    def user_valid?(user)
-      test = user.email =~ /.+\.com$/
-      test.nil?
-    end
+      def notify_admins_success(admin_data)
+        Admin.find_each do |admin|
+          AdminPurchaseMailer.operation_success(admin, admin_data).deliver_later
+        end
+      end
 
-    def retrieve_customer_data
-      CustomerData.new.retrieve
-    end
+      def notify_admins_fail(customer_email, errors)
+        Admin.find_each do |admin|
+          AdminPurchaseMailer.operation_fail(admin, customer_email, errors).deliver_later
+        end
+      end
 
-    def retrieve_admin_data
-      AdminData.new.retrieve
-    end
+      def check_requirements(customer, product)
+        errors = []
+        errors << 'Users with email in *.com domain can not purchase products' if !BuyingProcess::Requirements.user_allowed_to_buy?(customer)
+        errors << 'Users cannot buy this product' if !BuyingProcess::Requirements.product_can_be_bought?(product)
+        errors
+      end
 
-    def customer_data_errors(customer_data)
-      errors             = []
-      image_url_code     = image_color_from_url(customer_data.fetch('url'))
-      thumbnail_url_code = image_color_from_url(customer_data.fetch('thumbnailUrl'))
-      errors << 'Wrong image color during purchase process' if thumbnail_url_code > image_url_code
-      errors
-    end
+      def retrieve_customer_data
+        begin
+          BuyingProcess::RetrievedData.new(data: BuyingProcess::CustomerData.new.retrieve)
+        rescue Exception
+          BuyingProcess::RetrievedData.new(errors: ['Customer data API timed out'])
+        end
+      end
 
-    def image_color_from_url(url)
-      pattern = /.+\/(?<color>.+)/
-      r       = url.match(pattern)
-      r[:color].to_i(16) if r
+      def retrieve_admin_data
+        begin
+          BuyingProcess::RetrievedData.new(data: BuyingProcess::AdminData.new.retrieve)
+        rescue Exception
+          BuyingProcess::RetrievedData.new(errors: ['Admin data API timed out'])
+        end
+      end
+
+      def customer_data_errors(customer_data)
+        errors             = []
+        image_url_code     = image_color_from_url(customer_data.fetch('url'))
+        thumbnail_url_code = image_color_from_url(customer_data.fetch('thumbnailUrl'))
+        errors << 'Wrong image color during purchase process' if thumbnail_url_code > image_url_code
+        errors
+      end
+
+      def image_color_from_url(url)
+        pattern = /.+\/(?<color>.+)/
+        r       = url.match(pattern)
+        r[:color].to_i(16) if r
+      end
     end
   end
 end

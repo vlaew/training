@@ -59,7 +59,7 @@ class ProductsController < ApplicationController
   end
 
   def buy
-    result = BuyingProcess::Manager.new.buy(user: current_user.roleable, product: @product)
+    result = BuyingProcess::Manager.buy(customer: current_user.roleable, product: @product)
     if result.success?
       redirect_to @product, notice: 'You successfully bought this product!'
     else

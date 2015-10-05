@@ -12,8 +12,7 @@ class Ability
     when user.guest?
       can :read, Product
       can :buy, Product do |product|
-        !product.pro? &&
-          product.seller.present?
+        BuyingProcess::Requirements.product_can_be_bought?(product)
       end
     else
       can :read, Product, pro: false
