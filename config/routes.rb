@@ -8,5 +8,6 @@ Rails.application.routes.draw do
   resources :products do
     post 'buy', on: :member
   end
-  root 'home#index'
+
+  root 'products#index'
 end
