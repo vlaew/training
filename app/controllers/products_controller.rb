@@ -23,7 +23,7 @@ class ProductsController < ApplicationController
   # POST /products
   # POST /products.json
   def create
-    @product.seller = current_user.roleable
+    @product.user = current_user
     respond_to do |format|
       if @product.save
         format.html { redirect_to @product, notice: 'Product was successfully created.' }
@@ -59,7 +59,7 @@ class ProductsController < ApplicationController
   end
 
   def buy
-    result = BuyingProcess::Manager.buy(customer: current_user.roleable, product: @product)
+    result = BuyingProcess::Manager.buy(customer: current_user, product: @product)
     if result.success?
       redirect_to @product, notice: 'You successfully bought this product!'
     else

@@ -35,6 +35,7 @@ gem 'carrierwave' # Image uploads
 gem 'cancancan', '~> 1.10' # Authorization
 
 gem 'faraday'
+gem 'virtus' # Attributes for everyone
 
 group :development, :test do
   # Access an IRB console on exception pages or by using <%= console %> in views

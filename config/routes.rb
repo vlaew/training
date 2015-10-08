@@ -1,10 +1,22 @@
 Rails.application.routes.draw do
-  devise_for :admins, controllers: { registrations: 'admins/registrations' }
-  devise_for :sellers, controllers: { registrations: 'sellers/registrations' }
-  devise_for :guests, controllers: { registrations: 'guests/registrations' }
 
   devise_for :users, path: '/', path_names: { sign_in: 'login', sign_out: 'logout' },
              only: [:sessions]
+
+  namespace :registrations do
+    resources :admins, only: [:create] do
+      get 'sign_up' => 'admins#new', on: :collection
+    end
+
+    resources :sellers, only: [:create] do
+      get 'sign_up' => 'sellers#new', on: :collection
+    end
+
+    resources :guests, only: [:create] do
+      get 'sign_up' => 'guests#new', on: :collection
+    end
+  end
+
   resources :products do
     post 'buy', on: :member
   end

@@ -475,4 +475,5 @@ DEPENDENCIES
   uglifier (>= 1.3.0)
   unicorn
   unicorn-rails
+  virtus
   web-console (~> 2.0)

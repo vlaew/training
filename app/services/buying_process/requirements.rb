@@ -2,7 +2,7 @@ module BuyingProcess
   module Requirements
     class << self
       def product_can_be_bought?(product)
-        !product.pro? && product.seller.present?
+        !product.pro? && product.user.present?
       end
 
       def user_allowed_to_buy?(user)

@@ -4,17 +4,22 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, password_length: 6..128
 
-  belongs_to :roleable, polymorphic: true
+  mount_uploader :avatar_image, SimpleImageUploader
+  mount_uploader :passport_image, SimpleImageUploader
 
   def admin?
-    roleable.is_a? Admin
+    false
   end
 
   def seller?
-    roleable.is_a? Seller
+    false
   end
 
   def guest?
-    roleable.is_a? Guest
+    false
+  end
+
+  def full_name
+    email
   end
 end

@@ -14,7 +14,7 @@ module BuyingProcess
         admin_data = retrieve_admin_data
         return handle_fail(customer, customer_data.errors) if customer_data.errors.any?
 
-        handle_success(customer, customer_data, admin_data)
+        handle_success(customer, customer_data.data, admin_data.data)
       end
 
       private
@@ -71,8 +71,8 @@ module BuyingProcess
 
       def customer_data_errors(customer_data)
         errors             = []
-        image_url_code     = image_color_from_url(customer_data.fetch('url'))
-        thumbnail_url_code = image_color_from_url(customer_data.fetch('thumbnailUrl'))
+        image_url_code     = image_color_from_url(customer_data.data.fetch('url'))
+        thumbnail_url_code = image_color_from_url(customer_data.data.fetch('thumbnailUrl'))
         errors << 'Wrong image color during purchase process' if thumbnail_url_code > image_url_code
         errors
       end

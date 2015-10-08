@@ -11,20 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150927203243) do
-
-  create_table "admins", force: :cascade do |t|
-    t.string "first_name",     null: false
-    t.string "last_name",      null: false
-    t.string "avatar_image"
-    t.string "passport_image"
-    t.date   "birthdate"
-  end
-
-  create_table "guests", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
+ActiveRecord::Schema.define(version: 20151007182757) do
 
   create_table "products", force: :cascade do |t|
     t.string   "name"
@@ -33,15 +20,10 @@ ActiveRecord::Schema.define(version: 20150927203243) do
     t.datetime "updated_at",                  null: false
     t.string   "image"
     t.boolean  "pro",         default: false, null: false
-    t.integer  "seller_id"
+    t.integer  "user_id"
   end
 
-  add_index "products", ["seller_id"], name: "index_products_on_seller_id"
-
-  create_table "sellers", force: :cascade do |t|
-    t.string "shop_name",    null: false
-    t.string "avatar_image"
-  end
+  add_index "products", ["user_id"], name: "index_products_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -58,6 +40,13 @@ ActiveRecord::Schema.define(version: 20150927203243) do
     t.datetime "updated_at",                          null: false
     t.integer  "roleable_id"
     t.string   "roleable_type"
+    t.string   "type"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "avatar_image"
+    t.string   "passport_image"
+    t.date     "birthdate"
+    t.string   "shop_name"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
